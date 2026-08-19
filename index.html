@@ -496,7 +496,7 @@ footer{border-top:1px solid var(--line);padding:44px 0;background:var(--bg2)}
 <!-- ===== NIKE VIDEO HERO ===== -->
 <section class="nk" id="top" data-sport="bb">
   <video class="nk-video von" id="nkVid1" src="heroplayer.mp4" autoplay muted playsinline preload="auto" aria-hidden="true"></video>
-  <video class="nk-video" id="nkVid2" src="heroplayer2.mp4" muted playsinline preload="auto" aria-hidden="true"></video>
+  <video class="nk-video" id="nkVid2" src="heroplayer2.mp4" muted playsinline preload="metadata" aria-hidden="true"></video>
   <div class="nk-tint"></div>
   <div class="nk-lines"></div>
   <div class="nk-shade"></div>
@@ -1039,6 +1039,8 @@ nkVids.forEach((v,i)=>v.addEventListener('ended',()=>{
   next.classList.add('von');
   v.classList.remove('von');
 }));
+/* 두 번째 영상은 첫 영상이 돌기 시작한 뒤 받는다 — 첫 화면에서 5MB를 한 번에 물지 않도록 */
+nkVids[0].addEventListener('playing',()=>{nkVids[1].preload='auto';nkVids[1].load();},{once:true});
 nkVids[0].play().catch(()=>{});
 
 /* ===== sport cases tabs ===== */
