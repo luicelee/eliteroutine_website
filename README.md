@@ -6,7 +6,7 @@
 > 다치지 않고, 기록이 남고, 진학까지.
 
 - 단일 `index.html` — 바닐라 JS/CSS, 외부 의존성 없음
-- Cloudflare Pages로 배포 → **https://elite.pages.dev** (절차는 [DEPLOY.md](DEPLOY.md))
+- Cloudflare Pages로 배포 → **https://routi.pages.dev** (절차는 [DEPLOY.md](DEPLOY.md))
 - 다크(기본)/라이트 2테마, 인터랙티브 데모 4종 내장
 - 히어로 영상 2편 크로스페이드 체인 + 종목별 컬러 그레이딩 4장면 로테이션
 
