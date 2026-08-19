@@ -10,8 +10,32 @@
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname } from 'node:path';
+
+/* 브라우저 찾기.
+ * 로컬은 `npx playwright install chromium` 후 알아서 찾는다.
+ * 클라우드 컨테이너는 브라우저가 미리 깔려 있고 CDN이 막혀 있어 install이 불가능한데,
+ * playwright 버전과 미리 깔린 빌드 번호가 어긋나면 기본 경로를 못 찾는다. 그때 주워온다. */
+async function launchChromium() {
+  try {
+    return await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  } catch (err) {
+    const base = process.env.PLAYWRIGHT_BROWSERS_PATH || '/opt/pw-browsers';
+    const found = [];
+    if (existsSync(base)) {
+      if (existsSync(join(base, 'chromium'))) found.push(join(base, 'chromium'));
+      for (const d of readdirSync(base)) {
+        const p = join(base, d, 'chrome-linux', 'chrome');
+        if (d.startsWith('chromium') && existsSync(p)) found.push(p);
+      }
+    }
+    if (!found.length) throw err;
+    console.log(`  (미리 설치된 브라우저 사용: ${found[0]})`);
+    return await chromium.launch({ executablePath: found[0] });
+  }
+}
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MIME = { '.html': 'text/html', '.mp4': 'video/mp4', '.css': 'text/css', '.js': 'text/javascript' };
@@ -33,7 +57,7 @@ const check = (name, ok, detail = '') => {
   console.log(`  ${ok ? 'OK  ' : 'FAIL'} ${name}${detail ? ' — ' + detail : ''}`);
 };
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+const browser = await launchChromium();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
 page.on('pageerror', e => errors.push(e.message));

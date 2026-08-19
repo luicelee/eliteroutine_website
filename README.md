@@ -20,9 +20,14 @@ python -m http.server 8000
 ## 검증
 
 ```
-npm install     # 최초 1회
-npm test        # 약 18초
+npm install                      # 최초 1회
+npx playwright install chromium  # 최초 1회 (로컬만)
+npm test                         # 약 18초
 ```
+
+`npx playwright install`은 **로컬에서만** 필요하다. 클라우드 컨테이너에는 브라우저가
+미리 깔려 있고 Playwright CDN이 막혀 있어 실행해도 실패하는데, 테스트가 미리 깔린
+브라우저를 알아서 찾으므로 그냥 `npm test`만 하면 된다.
 
 콘솔 에러, 데모 4종 동작, 종목 탭 11개, 가격 표기 없음, 테마 토글,
 560/960/1440px 가로 스크롤을 확인한다. 영상 재생은 제외 — Playwright의
