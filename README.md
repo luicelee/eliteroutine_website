@@ -17,6 +17,17 @@ python -m http.server 8000
 # → http://localhost:8000
 ```
 
+## 검증
+
+```
+npm install     # 최초 1회
+npm test        # 약 18초
+```
+
+콘솔 에러, 데모 4종 동작, 종목 탭 11개, 가격 표기 없음, 테마 토글,
+560/960/1440px 가로 스크롤을 확인한다. 영상 재생은 제외 — Playwright의
+Chromium에 H.264 디코더가 없어 실제 브라우저에서만 확인된다.
+
 ## 관련 문서
 
 - [초보자 설명서](https://eliteroutine.github.io/beginner_guide.html)

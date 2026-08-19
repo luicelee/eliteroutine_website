@@ -1,0 +1,11 @@
+{
+  "name": "eliteroutine-website",
+  "private": true,
+  "description": "엘리트 루틴 케어 제품 홈페이지",
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}
