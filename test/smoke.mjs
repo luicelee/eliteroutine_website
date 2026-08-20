@@ -90,6 +90,15 @@ check('장면과 세그먼트 수가 같다', hero.slides === hero.segs && hero.
 check('영상 재생속도 0.8배', hero.rate === 0.8, String(hero.rate));
 check('첫 접속은 다크 테마', hero.theme === 'dark', hero.theme);
 
+/* 두 페이지가 스타일시트를 따로 들고 있다. 토큰이 어긋나기 시작하면 색과 활자가 서서히
+ * 갈라지는데 각 페이지만 보면 멀쩡해 보인다. 값을 직접 비교해 잡는다. */
+const TOKENS = ['--bg', '--ink', '--mark', '--rule', '--sans'];
+const readTokens = () => page.evaluate(ks => {
+  const cs = getComputedStyle(document.documentElement);
+  return ks.map(k => k + '=' + cs.getPropertyValue(k).trim()).join(' | ');
+}, TOKENS);
+const indexTokens = await readTokens();
+
 console.log('\n· 히어로 영상 — 재생 · 카피 동기 · 탐색');
 /* H.264가 디코딩되는 환경에서만 본다. Windows는 OS(Media Foundation) 디코더를 쓰므로 재생되고,
  * 리눅스 컨테이너의 Chromium에는 디코더가 없어 canPlayType이 빈 문자열을 준다. */
@@ -205,6 +214,30 @@ for (const [w, h] of [[1440, 900], [960, 800], [560, 800]]) {
   check(`${w}px 가로 스크롤 없음`,
     !(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)));
 }
+
+console.log('');
+console.log('· 만든 이유 카툰 페이지');
+const toonLinks = await page.$$eval('a[href="story.html"]', as => as.length);
+check('index에서 카툰 페이지로 가는 링크가 있다', toonLinks >= 2, toonLinks + '곳');
+await page.setViewportSize({ width: 1440, height: 900 });
+const storyResp = await page.goto(BASE + '/story.html', { waitUntil: 'networkidle' });
+await page.waitForTimeout(400);
+check('story.html 응답 200', storyResp.status() === 200, String(storyResp.status()));
+const toon = await page.evaluate(() => {
+  const img = document.querySelector('.toon-figure img');
+  return { w: img.naturalWidth, h: img.naturalHeight, theme: document.documentElement.dataset.theme,
+           back: document.querySelectorAll('a[href^="index.html"]').length };
+});
+check('만화 이미지가 실제로 로드된다', toon.w > 0 && toon.h > 0, toon.w + 'x' + toon.h);
+check('카툰 페이지도 첫 접속은 다크', toon.theme === 'dark', toon.theme);
+check('본편으로 돌아가는 링크가 있다', toon.back >= 3, toon.back + '곳');
+check('디자인 토큰이 index와 같다', (await readTokens()) === indexTokens);
+check('가로 스크롤 없음 (1440px)',
+  !(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)));
+await page.setViewportSize({ width: 560, height: 800 });
+await page.waitForTimeout(300);
+check('가로 스크롤 없음 (560px)',
+  !(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)));
 
 console.log('\n· 콘솔');
 check('콘솔 에러 0', errors.length === 0, errors.join(' | '));
