@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>엘리트 루틴 케어 — 스스로 루틴, 부상을 관리하고, 진학 리포트까지</title>
+<title>엘리트 루틴 케어 — 스스로, 루틴, 부상을 관리, 진학 리포트까지</title>
 <meta name="description" content="초·중·고 엘리트 선수를 위한 루틴·부상·진학 관리 앱. 38개 종목, 하루 3분.">
 <meta property="og:title" content="엘리트 루틴 케어">
-<meta property="og:description" content="스스로 루틴, 부상을 관리하고, 진학 리포트까지. 유소년 엘리트 선수를 위한 루틴·부상·진학 관리 앱.">
+<meta property="og:description" content="스스로, 루틴, 부상을 관리, 진학 리포트까지. 유소년 엘리트 선수를 위한 루틴·부상·진학 관리 앱.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230A0B0E'/><text x='50' y='70' font-size='58' font-weight='900' font-family='Helvetica,sans-serif' fill='white' text-anchor='middle'>R</text></svg>">
 <style>
@@ -174,12 +174,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
 /* ---------- 01 오프닝 스프레드 ---------- */
 .open{padding-top:clamp(56px,7vw,104px)}
 .open-grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.82fr);
-  gap:clamp(30px,5vw,84px);align-items:start}
-.open .label{margin-bottom:clamp(18px,2.4vw,30px)}
-/* 제목은 열이 아니라 지면 전체 폭에 건다 — 활자를 줄이지 않고 세 줄을 살리는 방법 */
-.open-head{margin-bottom:clamp(30px,4vw,58px);padding-bottom:clamp(28px,3.4vw,48px);
-  border-bottom:1px solid var(--rule)}
-.open-head .mk{color:var(--mark)}
+  gap:clamp(30px,5vw,84px);align-items:center}
+.open-text .label{margin-bottom:clamp(18px,2.4vw,30px)}
+/* 제목은 왼쪽 열 안에 든다 — 앱 화면이 글자 우측에 붙어야 하므로 열 폭에 맞춰 조인다 */
+.open-text .display{font-size:clamp(31px,5.2vw,76px);margin-bottom:clamp(20px,2.4vw,30px)}
+.open-text .display .mk{color:var(--mark)}
 .open-text .lead{margin-bottom:clamp(26px,3vw,38px)}
 .open-ctas{display:flex;gap:12px;flex-wrap:wrap}
 .stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
@@ -481,11 +480,29 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
   margin-top:clamp(30px,4vw,54px);padding-top:20px;border-top:1px solid var(--hair)}
 .foot-end span{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);font-weight:700}
 
+/* ---------- 스토어 안내 대화상자 ---------- */
+.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s}
+.modal.on{opacity:1;visibility:visible}
+.modal-back{position:absolute;inset:0;background:rgba(4,5,7,.72);backdrop-filter:blur(6px)}
+.modal-panel{position:relative;width:min(430px,100%);background:var(--bg);border:1px solid var(--rule);
+  padding:clamp(26px,4vw,38px);transform:translateY(14px);transition:transform .35s var(--ease)}
+.modal.on .modal-panel{transform:none}
+.modal-panel h3{margin:16px 0 12px}
+.modal-panel p{font-size:14px;line-height:1.85;color:var(--ink2)}
+.modal-mail{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  margin:20px 0 24px;padding:13px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  font-size:14.5px;font-weight:700;letter-spacing:-.02em}
+.modal-mail span{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);font-weight:800}
+.modal-mail b{color:var(--mark)}
+.modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;display:grid;place-items:center;
+  color:var(--ink3);font-size:17px;line-height:1;transition:.25s}
+.modal-close:hover{color:var(--ink)}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:1080px){
   .nav-links{display:none}
   .open-grid{grid-template-columns:1fr;gap:44px}
-  .phone-scene{order:-1}
   .feat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .feat--lead{grid-column:span 2;grid-row:auto}
 }
@@ -621,16 +638,15 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
 <!-- ===== 01 오프닝 스프레드 ===== -->
 <section class="sec open" id="product">
   <div class="wrap">
-    <div class="label rv on"><span class="n">01</span> 초·중·고 엘리트 선수 · 38개 종목</div>
-    <h1 class="display open-head rv on">스스로 루틴,<br>부상을 관리하고,<br><span class="mk">진학 리포트까지.</span></h1>
-
     <div class="open-grid">
       <div class="open-text">
+        <div class="label rv on"><span class="n">01</span> 초·중·고 엘리트 선수 · 38개 종목</div>
+        <h1 class="display rv on">스스로, 루틴,<br>부상을 관리,<br><span class="mk">진학 리포트까지.</span></h1>
         <p class="lead rv on d1">우리 아이의 훈련 부하를 과학적으로 지키고, 매일의 루틴이 진학 실적표가 되는 앱.
         하루 3분이면 충분합니다. 아이를 위한 앱이 아니라, <b>아이를 보는 부모의 앱</b>입니다.</p>
         <div class="open-ctas rv on d2">
-          <a href="#demo" class="btn btn-primary">기능 직접 체험하기</a>
-          <a href="#why" class="btn btn-ghost">만든 이유 보기</a>
+          <a href="#demo" class="btn btn-primary">기능 직접 체험</a>
+          <a href="#why" class="btn btn-ghost">만든 이유</a>
         </div>
       </div>
       <div class="phone-scene rv on d2">
@@ -1383,14 +1399,27 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
     <div class="wrap">
       <div class="free-note"><span class="dot"></span>출시 기념 · 지금은 모든 기능이 무료입니다</div>
       <h2 class="display">오늘의 3분이,<br>내일의 진학을 바꿉니다</h2>
-      <p>스스로 루틴, 부상을 관리하고, 진학 리포트까지. 지금 시작하세요.</p>
+      <p>스스로, 루틴, 부상을 관리, 진학 리포트까지. 지금 시작하세요.</p>
       <div class="open-ctas">
-        <a href="#" class="btn btn-primary">App Store에서 받기</a>
-        <a href="#" class="btn btn-ghost">Google Play에서 받기</a>
+        <button type="button" class="btn btn-primary" data-store>App Store에서 받기</button>
+        <button type="button" class="btn btn-ghost" data-store>Google Play에서 받기</button>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ===== 스토어 안내 ===== -->
+<div class="modal" id="storeModal" role="dialog" aria-modal="true" aria-labelledby="storeModalTitle">
+  <div class="modal-back" data-close></div>
+  <div class="modal-panel">
+    <button class="modal-close" type="button" data-close aria-label="닫기">&times;</button>
+    <div class="label"><span class="n">준비 중</span></div>
+    <h3 class="h3" id="storeModalTitle">테스트 버전 배포 중입니다</h3>
+    <p>정식 스토어 등록 전이라 아직 내려받을 수 없습니다. 테스트 참여나 문의는 아래로 연락 주세요.</p>
+    <a class="modal-mail" href="mailto:64723a@gmail.com"><span>문의</span><b>64723a@gmail.com</b></a>
+    <button class="btn btn-primary" type="button" data-close style="width:100%;justify-content:center">닫기</button>
+  </div>
+</div>
 
 <!-- ===== 판권 ===== -->
 <footer>
@@ -1417,7 +1446,7 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
     </div>
     <div class="foot-end">
       <span>© 2026 Elite Routine Care</span>
-      <span>스스로 루틴, 부상을 관리하고, 진학 리포트까지</span>
+      <span>스스로, 루틴, 부상을 관리, 진학 리포트까지</span>
     </div>
   </div>
 </footer>
@@ -1479,9 +1508,10 @@ function nkShow(idx){
 
 /* 재생 중인 영상의 시각으로 장면과 진행바를 갱신한다 */
 function nkTick(){
+  nkApplyPending();
   const vi=nkVids.findIndex(v=>v.classList.contains('von'));
   const v=nkVids[vi];
-  if(v&&isFinite(v.currentTime)){
+  if(v&&isFinite(v.currentTime)&&!nkPending){
     const now=v.currentTime;
     let sc=nkScenes.find(s=>s.v===vi);
     for(const s of nkScenes)if(s.v===vi&&now>=s.t)sc=s;
@@ -1496,9 +1526,24 @@ function nkTick(){
 requestAnimationFrame(nkTick);
 
 /* 세그먼트 클릭 — 해당 영상으로 넘기고 그 장면 머리로 이동.
-   두 번째 영상은 첫 영상이 돌기 시작한 뒤에야 받으므로, 이른 클릭에는 아직 메타데이터가
-   없을 수 있다. 그 상태의 currentTime 대입은 조용히 무시된다 — 눌러도 아무 일이 없고
-   엉뚱한 장면이 뜬다. 준비되면 다시 건다. */
+
+   두 가지가 탐색을 막는다.
+   1) 두 번째 영상은 첫 영상이 돌기 시작한 뒤에야 받는다. 이른 클릭에는 메타데이터가 없다.
+   2) Cloudflare Pages는 Range 요청에 206이 아니라 200 전체를 돌려준다(2026-08-20 확인).
+      그래서 파일을 끝까지 받기 전에는 seekable이 비어 있다.
+   둘 다 currentTime 대입이 예외 없이 조용히 무시되고, 누른 것과 다른 장면이 뜬다.
+   가능해질 때까지 들고 있다가 건다. 기다리는 동안 카피는 누른 장면에 고정한다. */
+let nkPending=null,nkPendingAt=0;
+function nkApplyPending(){
+  if(!nkPending)return;
+  const to=nkVids[nkPending.v],n=to.seekable.length;
+  if(n&&to.seekable.end(n-1)>=nkPending.t+0.05){
+    try{to.currentTime=nkPending.t;}catch(e){}
+    nkPending=null;
+  }else if(performance.now()-nkPendingAt>12000){
+    nkPending=null;   /* 12초를 기다려도 안 되면 포기하고 흐름을 되돌려준다 */
+  }
+}
 function nkSeek(sc){
   const from=nkVids.find(v=>v.classList.contains('von'));
   const to=nkVids[sc.v];
@@ -1507,12 +1552,9 @@ function nkSeek(sc){
     from.classList.remove('von');
     to.classList.add('von');
   }
-  const seek=()=>{try{to.currentTime=sc.t;}catch(e){}};
-  if(to.readyState>0)seek();
-  else{
-    if(to.preload!=='auto'){to.preload='auto';to.load();}
-    to.addEventListener('loadedmetadata',seek,{once:true});
-  }
+  if(to.preload!=='auto'){to.preload='auto';to.load();}
+  nkPending=sc;nkPendingAt=performance.now();
+  nkApplyPending();
   to.play().catch(()=>{});
   nkShow(sc.i);
 }
@@ -1586,6 +1628,24 @@ document.querySelectorAll('.demo-tab').forEach(tab=>{
     document.getElementById(tab.dataset.panel).classList.add('active');
   });
 });
+
+/* ===== 스토어 안내 대화상자 ===== */
+const storeModal=document.getElementById('storeModal');
+let storeOpener=null;
+function storeOpen(e){
+  storeOpener=e.currentTarget;
+  storeModal.classList.add('on');
+  document.body.style.overflow='hidden';
+  storeModal.querySelector('.modal-close').focus();
+}
+function storeClose(){
+  storeModal.classList.remove('on');
+  document.body.style.overflow='';
+  if(storeOpener)storeOpener.focus();
+}
+document.querySelectorAll('[data-store]').forEach(b=>b.addEventListener('click',storeOpen));
+storeModal.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',storeClose));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&storeModal.classList.contains('on'))storeClose();});
 
 /* ===== demo 1 : routine ===== */
 const rItems=[...document.querySelectorAll('#routineList .r-item')];
