@@ -74,6 +74,7 @@ section[id]{scroll-margin-top:84px}
 .lead{font-size:clamp(15.5px,1.3vw,19px);line-height:1.88;color:var(--ink2);max-width:34em}
 .lead b{color:var(--ink);font-weight:700}
 .cap{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--ink3)}
+.mk{color:var(--mark)}
 
 /* ---------- BUTTONS ---------- */
 .btn{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:700;letter-spacing:-.015em;
@@ -243,6 +244,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
 .plate-cap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
   padding:11px 0 0;border-top:1px solid var(--hair);margin-top:14px}
 .plate-cap span{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--ink3)}
+
+/* ---------- 02 반성문 (에세이) ---------- */
+.essay{max-width:34em;margin:0 auto}
+.essay h2{font-size:clamp(25px,3.3vw,41px);margin-bottom:clamp(26px,3.2vw,40px)}
+.essay h3{margin:clamp(36px,4.6vw,64px) 0 20px;color:var(--ink)}
+.essay p{font-size:clamp(15px,1.25vw,17.5px);line-height:2.05;letter-spacing:-.012em;
+  color:var(--ink2);margin-bottom:20px}
+.essay p b{color:var(--ink);font-weight:700}
+.pull{margin:clamp(32px,4vw,56px) 0;padding:clamp(22px,3vw,34px) 0;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  font-size:clamp(20px,2.5vw,31px);font-weight:800;letter-spacing:-.038em;line-height:1.45;color:var(--ink)}
+.pull b{color:var(--mark);font-weight:800}
+.sign{margin-top:clamp(32px,4vw,50px);padding-top:16px;border-top:1px solid var(--hair);
+  font-size:11px;letter-spacing:.14em;color:var(--ink3);font-weight:700}
+.bridge{margin-top:clamp(40px,5vw,80px)}
+.bridge .cap{margin-bottom:14px}
 
 /* ---------- 02 챕터 ---------- */
 .chapters{margin-top:clamp(34px,4.4vw,64px)}
@@ -710,22 +727,71 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
 <!-- ===== 02 만든 이유 ===== -->
 <section id="why">
   <figure class="plate">
-    <img src="img/scene-tk.webp" alt="태권도 겨루기 훈련 장면" width="1600" height="900" loading="lazy">
+    <img src="img/scene-bb.webp" alt="야간 조명 아래 타격하는 야구 선수" width="1400" height="787" loading="lazy">
     <figcaption class="plate-copy">
       <div class="wrap">
-        <h2 class="h2">부상은 갑자기 오지 않습니다.<br>다만 아무도 세지 않았을 뿐.</h2>
-        <p class="sub">유소년 엘리트 선수의 훈련은 기록되지 않고, 통증은 참아지고, 실적은 흩어집니다.
-        세 가지 문제를 하나의 루틴으로 해결합니다.</p>
+        <h2 class="h2">&ldquo;네가 평소에 보강 운동<br>안 해서 아픈 거야.&rdquo;</h2>
+        <p class="sub">대회 첫날, 마운드 대신 병원 의자에 앉은 아이에게 제가 한 첫마디입니다.</p>
       </div>
     </figcaption>
   </figure>
   <div class="wrap">
-    <div class="plate-cap"><span>도판 01 · 태권도 — 유연성 루틴</span><span>Elite Routine Care</span></div>
+    <div class="plate-cap"><span>도판 01 · 야구 — 투구 수 관리</span><span>Elite Routine Care</span></div>
   </div>
 
-  <div class="sec" style="padding-top:clamp(46px,5vw,80px)">
+  <div class="sec" style="padding-top:clamp(46px,5vw,80px);padding-bottom:0">
     <div class="wrap">
       <div class="label rv"><span class="n">02</span> 만든 이유</div>
+      <div class="essay">
+        <h2 class="h2 rv" style="margin-top:clamp(20px,2.6vw,34px)">이 앱은<br>반성문에서 시작했습니다</h2>
+
+        <p class="rv">열 달 전에도 같은 자리가 아프다고 했습니다. 그때는 대수롭지 않게 넘겼습니다.
+        대회 첫날 아침, 아이는 마운드가 아니라 병원 의자에 앉아 있었습니다. 피로 골절이었습니다.
+        고개를 숙인 아이에게 저는 위로 대신 화를 냈습니다.</p>
+
+        <p class="rv">집에 돌아와서야 알았습니다. 아이는 열 달을 아팠고, 저는 그걸 몰랐습니다.
+        <b>모르면서 화를 냈습니다.</b> 아이의 몸을 저는 기억으로만 알고 있었고, 기억은 언제나
+        제가 믿고 싶은 쪽으로 틀렸습니다.</p>
+
+        <blockquote class="pull rv">부모의 감은 자주 틀립니다.<br><b>기록은 틀리지 않습니다.</b></blockquote>
+
+        <p class="rv">그날부터 적기 시작했습니다. 며칠을 던졌는지, 얼마나 쉬었는지, 어디가 언제부터
+        아팠는지. 감이 아니라 숫자로. 그러자 보이지 않던 것이 보였습니다.</p>
+
+        <h3 class="h3 rv">&ldquo;튜빙 밴드 당겼어? 스트레칭은?&rdquo;</h3>
+
+        <p class="rv">매일 같은 말을 했고, 매일 같은 다툼으로 끝났습니다. 아이는 하는 척을 했고,
+        저는 그걸 알면서도 또 물었습니다.</p>
+
+        <p class="rv">아이가 게을러서가 아니었습니다. 혼자 반복하는 일에는 아무 표시가 남지 않기
+        때문입니다. <b>해도 티가 나지 않는 일을 매일 하라는 건, 어른에게도 어려운 부탁입니다.</b></p>
+
+        <p class="rv">그래서 잔소리를 지우고 그 자리에 기록을 놓았습니다. 루틴을 지킨 날은 불꽃이
+        커지고, 지나간 날들은 그대로 남습니다. 이제 아이는 제게 묻지 않고 자기 화면을 봅니다.
+        훈련이 숙제가 아니라 자기 것이 되는 순간입니다.</p>
+
+        <div class="sign rv">엘리트 루틴 케어를 만든 사람 · 어느 투수의 아버지</div>
+      </div>
+    </div>
+  </div>
+
+  <figure class="plate">
+    <img src="img/scene-tk.webp" alt="태권도 겨루기 훈련 장면" width="1400" height="787" loading="lazy">
+    <figcaption class="plate-copy">
+      <div class="wrap">
+        <h2 class="h2">부상은 갑자기 오지 않습니다.<br>다만 아무도 세지 않았을 뿐.</h2>
+        <p class="sub">훈련은 기록되지 않고, 통증은 참아지고, 실적은 흩어집니다.
+        세 가지를 하나의 루틴으로 묶었습니다.</p>
+      </div>
+    </figcaption>
+  </figure>
+  <div class="wrap">
+    <div class="plate-cap"><span>도판 02 · 태권도 — 유연성 루틴</span><span>38개 종목 지원</span></div>
+  </div>
+
+  <div class="sec">
+    <div class="wrap">
+      <div class="cap rv">그래서 이렇게 만들었습니다</div>
       <div class="chapters">
         <div class="chapter rv">
           <div>
@@ -1362,7 +1428,7 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
     </figcaption>
   </figure>
   <div class="wrap">
-    <div class="plate-cap"><span>도판 02 · 조정 — 연속 루틴</span><span>Privacy First</span></div>
+    <div class="plate-cap"><span>도판 03 · 조정 — 연속 루틴</span><span>Privacy First</span></div>
 
     <div class="sec" style="padding-bottom:clamp(40px,5vw,80px)">
       <div class="label rv"><span class="n">06</span> 정보 보호</div>
@@ -1398,8 +1464,8 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
   <div class="finale-in">
     <div class="wrap">
       <div class="free-note"><span class="dot"></span>출시 기념 · 지금은 모든 기능이 무료입니다</div>
-      <h2 class="display">오늘의 3분이,<br>내일의 진학을 바꿉니다</h2>
-      <p>스스로, 루틴, 부상을 관리, 진학 리포트까지. 지금 시작하세요.</p>
+      <h2 class="display">다쳐서 우는 아이도,<br>뒤돌아 자책하는 부모도<br><span class="mk">없도록.</span></h2>
+      <p>오늘의 흔들림 없는 루틴이 내일까지 달릴 힘을 만듭니다. 아이의 여정을 함께 시작하세요.</p>
       <div class="open-ctas">
         <button type="button" class="btn btn-primary" data-store>App Store에서 받기</button>
         <button type="button" class="btn btn-ghost" data-store>Google Play에서 받기</button>
