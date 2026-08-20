@@ -333,6 +333,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
 .try-hint{margin-top:20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   font-weight:800;color:var(--mark)}
 
+/* 기능별 광고 영상 — 해당 데모 옆에 붙는다 */
+.ad-link{display:flex;align-items:center;gap:14px;width:100%;margin-top:22px;padding:12px;
+  border:1px solid var(--rule);text-align:left;transition:.25s var(--ease)}
+.ad-link:hover{border-color:var(--mark);background:var(--bg2)}
+.ad-thumb{position:relative;flex-shrink:0;width:64px;aspect-ratio:9/16;overflow:hidden;background:var(--bg2)}
+.ad-thumb img{width:100%;height:100%;object-fit:cover}
+.ad-thumb::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;
+  transform:translate(-42%,-50%);border-left:13px solid #fff;border-top:8px solid transparent;
+  border-bottom:8px solid transparent;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.ad-txt b{display:block;font-size:14px;font-weight:800;letter-spacing:-.03em;margin-bottom:5px}
+.ad-link:hover .ad-txt b{color:var(--mark)}
+.ad-txt small{display:block;font-size:11.5px;line-height:1.6;color:var(--ink3);font-weight:600}
+.ad-tag{display:inline-block;margin-bottom:7px;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:800;color:var(--mark)}
+
+/* 세로 영상 재생 창 */
+.vmodal-panel{position:relative;width:min(400px,100%);max-height:88vh;background:var(--bg);
+  border:1px solid var(--rule);padding:18px;transform:translateY(14px);transition:transform .35s var(--ease)}
+.modal.on .vmodal-panel{transform:none}
+.vmodal-panel video{width:100%;max-height:calc(88vh - 96px);background:#000;margin-top:14px}
+.vmodal-panel .label{padding-right:34px}
+
 /* 앱 화면만 둥글다 — 지면은 각지고, 제품은 부드럽다 */
 .stage{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:clamp(18px,2.2vw,26px)}
 .stage-head{display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -1158,6 +1180,10 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
           <li><span class="tick">✓</span>루틴 완료 시 게임 아케이드 입장권 생성</li>
         </ul>
         <div class="try-hint">체크리스트를 직접 눌러보세요</div>
+        <button class="ad-link" type="button" data-ad="video/ad-routine.mp4" data-ad-name="루틴 영상">
+          <span class="ad-thumb"><img src="img/ad-routine.webp" alt="" width="420" height="746" loading="lazy"></span>
+          <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[루틴 영상]</b><small>23초 · 잔소리 없이 아이가 스스로 루틴을 채워가는 하루</small></span>
+        </button>
       </div>
       <div class="stage">
         <div class="stage-head"><b>오늘의 루틴 · 축구 (윙어)</b><span class="stage-badge">LIVE DEMO</span></div>
@@ -1196,6 +1222,10 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
           <li><span class="tick">✓</span>통증 기록은 성장 곡선 위에 겹쳐 의료진 제출 가능</li>
         </ul>
         <div class="try-hint">슬라이더를 움직이고 몸 그림을 눌러보세요</div>
+        <button class="ad-link" type="button" data-ad="video/ad-injury.mp4" data-ad-name="부상 영상">
+          <span class="ad-thumb"><img src="img/ad-injury.webp" alt="" width="420" height="746" loading="lazy"></span>
+          <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[부상 영상]</b><small>17초 · 팔꿈치가 아프기 전, 과부하 경고가 뜨는 순간</small></span>
+        </button>
       </div>
       <div class="stage">
         <div class="stage-head"><b>훈련 부하 모니터 (ACWR)</b><span class="stage-badge">LIVE DEMO</span></div>
@@ -1251,6 +1281,10 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
           <li><span class="tick">✓</span>수치는 앱 기록 기반 — 위·변조 없는 신뢰</li>
         </ul>
         <div class="try-hint">버튼을 눌러 샘플 실적표를 생성해보세요</div>
+        <button class="ad-link" type="button" data-ad="video/ad-report.mp4" data-ad-name="진학 영상">
+          <span class="ad-thumb"><img src="img/ad-report.webp" alt="" width="420" height="746" loading="lazy"></span>
+          <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[진학 영상]</b><small>20초 · 매일의 기록이 진학 상담 리포트가 되기까지</small></span>
+        </button>
       </div>
       <div class="stage">
         <div class="stage-head"><b>진학 포트폴리오</b><span class="stage-badge">LIVE DEMO</span></div>
@@ -1291,6 +1325,10 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
           <li><span class="tick">✓</span>아이의 훈련일지·AI 대화는 부모도 볼 수 없는 아이만의 공간</li>
         </ul>
         <div class="try-hint">버튼을 눌러 자녀 계정과 연동해보세요</div>
+        <button class="ad-link" type="button" data-ad="video/ad-care.mp4" data-ad-name="통증 기록 영상">
+          <span class="ad-thumb"><img src="img/ad-care.webp" alt="" width="420" height="746" loading="lazy"></span>
+          <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[통증 기록 영상]</b><small>17초 · 아이가 남긴 통증이 부모와 의료진에게 닿는 길</small></span>
+        </button>
       </div>
       <div class="stage">
         <div class="stage-head"><b>학부모 대시보드</b><span class="stage-badge">LIVE DEMO</span></div>
@@ -1476,6 +1514,16 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
     </div>
   </div>
 </section>
+
+<!-- ===== 기능별 영상 ===== -->
+<div class="modal" id="adModal" role="dialog" aria-modal="true" aria-labelledby="adModalTitle">
+  <div class="modal-back" data-adclose></div>
+  <div class="vmodal-panel">
+    <button class="modal-close" type="button" data-adclose aria-label="닫기">&times;</button>
+    <div class="label" id="adModalTitle"><span class="n" id="adModalName">영상</span></div>
+    <video id="adVideo" controls playsinline preload="none"></video>
+  </div>
+</div>
 
 <!-- ===== 스토어 안내 ===== -->
 <div class="modal" id="storeModal" role="dialog" aria-modal="true" aria-labelledby="storeModalTitle">
@@ -1698,6 +1746,32 @@ document.querySelectorAll('.demo-tab').forEach(tab=>{
     document.getElementById(tab.dataset.panel).classList.add('active');
   });
 });
+
+/* ===== 기능별 광고 영상 =====
+   src를 미리 걸어두지 않는다. 4편 합쳐 12MB라 첫 화면에서 받을 이유가 없다.
+   누를 때 붙이고, 닫을 때 떼어 내려받기를 끊는다. */
+const adModal=document.getElementById('adModal');
+const adVideo=document.getElementById('adVideo');
+const adName=document.getElementById('adModalName');
+let adOpener=null;
+document.querySelectorAll('.ad-link').forEach(b=>b.addEventListener('click',()=>{
+  adOpener=b;
+  adName.textContent=b.dataset.adName;
+  adVideo.src=b.dataset.ad;
+  adModal.classList.add('on');
+  document.body.style.overflow='hidden';
+  adVideo.play().catch(()=>{});
+}));
+function adClose(){
+  adModal.classList.remove('on');
+  document.body.style.overflow='';
+  adVideo.pause();
+  adVideo.removeAttribute('src');
+  adVideo.load();
+  if(adOpener)adOpener.focus();
+}
+adModal.querySelectorAll('[data-adclose]').forEach(b=>b.addEventListener('click',adClose));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&adModal.classList.contains('on'))adClose();});
 
 /* ===== 스토어 안내 대화상자 ===== */
 const storeModal=document.getElementById('storeModal');

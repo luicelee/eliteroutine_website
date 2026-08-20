@@ -186,6 +186,44 @@ await page.click('#pairBtn');
 await page.waitForTimeout(2400);
 check('학부모 대시보드 연동', await page.$eval('#parentCards', el => el.classList.contains('live')));
 
+console.log('');
+console.log('· 기능별 광고 영상');
+const ads = await page.$$eval('.ad-link', bs => bs.map(b => ({
+  name: b.dataset.adName, src: b.dataset.ad, panel: b.closest('.demo-panel').id,
+})));
+check('데모 4종에 영상 링크가 하나씩 붙어 있다', ads.length === 4, ads.map(a => a.name).join(' · '));
+const WANT = { 'p-routine': '루틴 영상', 'p-injury': '부상 영상', 'p-report': '진학 영상', 'p-parent': '통증 기록 영상' };
+check('영상이 맞는 데모에 붙었다',
+  ads.every(a => WANT[a.panel] === a.name), ads.map(a => a.panel + '→' + a.name).join(' · '));
+check('첫 화면에서 영상을 미리 받지 않는다',
+  await page.$eval('#adVideo', v => !v.getAttribute('src') && v.preload === 'none'));
+
+/* 실제로 열어 재생되는지. 파일이 없거나 경로가 틀리면 여기서 잡힌다 */
+await page.click('.demo-tab[data-panel="p-routine"]');
+await page.waitForTimeout(200);
+await page.click('#p-routine .ad-link');
+await page.waitForTimeout(1800);
+const ad = await page.evaluate(() => {
+  const v = document.getElementById('adVideo');
+  return { on: document.getElementById('adModal').classList.contains('on'),
+           src: (v.currentSrc || '').split('/').pop(), rs: v.readyState,
+           err: v.error ? v.error.code : null, name: document.getElementById('adModalName').textContent };
+});
+check('링크를 누르면 영상이 열리고 로드된다', ad.on && ad.rs > 0 && !ad.err,
+  `${ad.name} · ${ad.src} · readyState=${ad.rs}`);
+await page.keyboard.press('Escape');
+await page.waitForTimeout(400);
+check('닫으면 src를 떼어 내려받기를 끊는다',
+  await page.$eval('#adVideo', v => !v.getAttribute('src')));
+
+/* 네 편 모두 서버에 실제로 있는지 */
+const codes = await page.evaluate(async srcs => {
+  const out = [];
+  for (const s of srcs) out.push(s.split('/').pop() + ':' + (await fetch(s, { method: 'HEAD' })).status);
+  return out;
+}, ads.map(a => a.src));
+check('영상 파일 4개가 모두 응답한다', codes.every(c => c.endsWith(':200')), codes.join(' '));
+
 console.log('\n· 종목 사례');
 const tabs = await page.$$eval('.sport-tab', ts => ts.map(t => t.dataset.sport));
 let tabOk = 0;
