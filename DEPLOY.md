@@ -1,6 +1,6 @@
 # 배포 — routi.pages.dev
 
-정적 사이트(`index.html` · `story.html` + 히어로 영상 2개 + 기능별 영상 4개 + 사진 21장)라
+정적 사이트(`index.html` · `story.html` + 히어로 영상 2개 + 기능별 영상 5개 + 사진 22장)라
 빌드 과정이 없다.
 
 | 항목 | 값 |

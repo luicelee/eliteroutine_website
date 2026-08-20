@@ -191,10 +191,13 @@ console.log('· 기능별 광고 영상');
 const ads = await page.$$eval('.ad-link', bs => bs.map(b => ({
   name: b.dataset.adName, src: b.dataset.ad, panel: b.closest('.demo-panel').id,
 })));
-check('데모 4종에 영상 링크가 하나씩 붙어 있다', ads.length === 4, ads.map(a => a.name).join(' · '));
-const WANT = { 'p-routine': '루틴 영상', 'p-injury': '부상 영상', 'p-report': '진학 영상', 'p-parent': '통증 기록 영상' };
+/* 데모 2(부상 관리)에는 두 편이 붙는다 — 위험을 감지하는 이야기와 진료로 이어지는 이야기 */
+const WANT = [['p-routine', '루틴 영상'], ['p-injury', '부상 영상'], ['p-injury', '진료 영상'],
+              ['p-report', '진학 영상'], ['p-parent', '통증 기록 영상']];
+check('영상 링크가 5편 다 붙어 있다', ads.length === 5, ads.map(a => a.name).join(' · '));
 check('영상이 맞는 데모에 붙었다',
-  ads.every(a => WANT[a.panel] === a.name), ads.map(a => a.panel + '→' + a.name).join(' · '));
+  WANT.every(([panel, name]) => ads.some(a => a.panel === panel && a.name === name)),
+  ads.map(a => a.panel + '→' + a.name).join(' · '));
 check('첫 화면에서 영상을 미리 받지 않는다',
   await page.$eval('#adVideo', v => !v.getAttribute('src') && v.preload === 'none'));
 
@@ -222,7 +225,7 @@ const codes = await page.evaluate(async srcs => {
   for (const s of srcs) out.push(s.split('/').pop() + ':' + (await fetch(s, { method: 'HEAD' })).status);
   return out;
 }, ads.map(a => a.src));
-check('영상 파일 4개가 모두 응답한다', codes.every(c => c.endsWith(':200')), codes.join(' '));
+check(`영상 파일 ${codes.length}개가 모두 응답한다`, codes.every(c => c.endsWith(':200')), codes.join(' '));
 
 console.log('\n· 종목 사례');
 const tabs = await page.$$eval('.sport-tab', ts => ts.map(t => t.dataset.sport));

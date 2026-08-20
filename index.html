@@ -337,6 +337,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
 .ad-link{display:flex;align-items:center;gap:14px;width:100%;margin-top:22px;padding:12px;
   border:1px solid var(--rule);text-align:left;transition:.25s var(--ease)}
 .ad-link:hover{border-color:var(--mark);background:var(--bg2)}
+.ad-link + .ad-link{margin-top:10px}
 .ad-thumb{position:relative;flex-shrink:0;width:64px;aspect-ratio:9/16;overflow:hidden;background:var(--bg2)}
 .ad-thumb img{width:100%;height:100%;object-fit:cover}
 .ad-thumb::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;
@@ -1226,6 +1227,10 @@ footer{border-top:1px solid var(--rule);padding:clamp(40px,5vw,72px) 0 44px}
           <span class="ad-thumb"><img src="img/ad-injury.webp" alt="" width="420" height="746" loading="lazy"></span>
           <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[부상 영상]</b><small>17초 · 팔꿈치가 아프기 전, 과부하 경고가 뜨는 순간</small></span>
         </button>
+        <button class="ad-link" type="button" data-ad="video/ad-clinic.mp4" data-ad-name="진료 영상">
+          <span class="ad-thumb"><img src="img/ad-clinic.webp" alt="" width="420" height="746" loading="lazy"></span>
+          <span class="ad-txt"><span class="ad-tag">영상으로 보기</span><b>[진료 영상]</b><small>16초 · 기록을 들고 진료실로 — 의료진과 함께 보는 부상 이력</small></span>
+        </button>
       </div>
       <div class="stage">
         <div class="stage-head"><b>훈련 부하 모니터 (ACWR)</b><span class="stage-badge">LIVE DEMO</span></div>
@@ -1748,7 +1753,7 @@ document.querySelectorAll('.demo-tab').forEach(tab=>{
 });
 
 /* ===== 기능별 광고 영상 =====
-   src를 미리 걸어두지 않는다. 4편 합쳐 12MB라 첫 화면에서 받을 이유가 없다.
+   src를 미리 걸어두지 않는다. 5편 합쳐 14MB라 첫 화면에서 받을 이유가 없다.
    누를 때 붙이고, 닫을 때 떼어 내려받기를 끊는다. */
 const adModal=document.getElementById('adModal');
 const adVideo=document.getElementById('adVideo');
