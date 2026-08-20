@@ -4,8 +4,8 @@
  * 그 아래 데모가 통째로 죽는데 화면은 멀쩡해 보인다. 그걸 잡는 게 목적이다.
  * 정적 서버를 직접 띄우므로 사전 준비 없이 이 한 줄이면 끝난다.
  *
- * 영상 재생은 여기서 확인하지 않는다 — Playwright의 Chromium에 H.264 디코더가
- * 없어서 재생 자체가 불가능하다. 실제 브라우저에서만 확인된다.
+ * 영상은 H.264 디코더가 있는 환경에서만 검증한다(Windows는 OS 디코더를 쓴다).
+ * 없는 환경 — 리눅스 컨테이너의 Chromium — 에서는 SKIP으로 넘어가고 실패로 세지 않는다.
  */
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
@@ -40,11 +40,25 @@ async function launchChromium() {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MIME = { '.html': 'text/html', '.mp4': 'video/mp4', '.css': 'text/css', '.js': 'text/javascript' };
 
+/* Range 요청을 받아준다. 지원하지 않으면 브라우저의 seekable.end(0)이 0이 되어
+ * 영상 탐색이 전부 실패한다 (python -m http.server로 한 번 헤맨 지점이다). */
 const server = createServer(async (req, res) => {
   const path = join(ROOT, decodeURIComponent(req.url.split('?')[0]) === '/' ? 'index.html' : req.url.split('?')[0]);
   try {
     const body = await readFile(path);
-    res.writeHead(200, { 'Content-Type': MIME[extname(path)] || 'application/octet-stream' });
+    const type = MIME[extname(path)] || 'application/octet-stream';
+    const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+    if (m && (m[1] || m[2])) {
+      const start = m[1] ? +m[1] : body.length - +m[2];
+      const end = m[1] && m[2] ? Math.min(+m[2], body.length - 1) : body.length - 1;
+      const slice = body.subarray(start, end + 1);
+      res.writeHead(206, {
+        'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': slice.length,
+        'Content-Range': `bytes ${start}-${end}/${body.length}`,
+      });
+      return res.end(slice);
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': body.length });
     res.end(body);
   } catch { res.writeHead(404).end(); }
 }).listen(0);
@@ -56,6 +70,7 @@ const check = (name, ok, detail = '') => {
   if (!ok) fails.push(name);
   console.log(`  ${ok ? 'OK  ' : 'FAIL'} ${name}${detail ? ' — ' + detail : ''}`);
 };
+const skip = (name, why) => console.log(`  SKIP ${name} — ${why}`);
 
 const browser = await launchChromium();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -74,6 +89,65 @@ const hero = await page.evaluate(() => ({
 check('장면과 세그먼트 수가 같다', hero.slides === hero.segs && hero.slides > 0, `${hero.slides}장면 / ${hero.segs}세그먼트`);
 check('영상 재생속도 0.8배', hero.rate === 0.8, String(hero.rate));
 check('첫 접속은 다크 테마', hero.theme === 'dark', hero.theme);
+
+console.log('\n· 히어로 영상 — 재생 · 카피 동기 · 탐색');
+/* H.264가 디코딩되는 환경에서만 본다. Windows는 OS(Media Foundation) 디코더를 쓰므로 재생되고,
+ * 리눅스 컨테이너의 Chromium에는 디코더가 없어 canPlayType이 빈 문자열을 준다. */
+const h264 = await page.evaluate(() => !!document.getElementById('nkVid1').canPlayType('video/mp4; codecs="avc1.42E01E"'));
+if (!h264) {
+  skip('영상 4종', 'H.264 디코더가 없는 환경이다 (실제 브라우저에서만 확인된다)');
+} else {
+  const play = await page.evaluate(async () => {
+    const v = document.getElementById('nkVid1');
+    const t0 = v.currentTime;
+    await new Promise(r => setTimeout(r, 900));
+    return { adv: v.currentTime - t0, dur: v.duration, err: v.error && v.error.code, w: v.videoWidth };
+  });
+  check('영상1이 실제로 재생된다', play.adv > 0.3 && !play.err && play.w > 0,
+    `+${play.adv.toFixed(2)}s / ${play.w}px`);
+  /* 장면표(DECISIONS.md 1번)가 전제하는 길이다. 영상을 갈아끼우면 여기서 먼저 걸린다 */
+  check('영상1 길이 10.0초 — 장면표 전제', Math.abs(play.dur - 10.01) < 0.3, `${play.dur}초`);
+
+  /* 카피는 타이머가 아니라 영상 시각을 따라간다. 임의 시점으로 감고 그 컷의 종목이 뜨는지 본다 */
+  const at = async (t) => page.evaluate(async (t) => {
+    const v = document.getElementById('nkVid1');
+    v.currentTime = t;
+    await new Promise(r => setTimeout(r, 260));
+    const on = document.querySelector('.nk-slide.on');
+    return { slide: on && on.dataset.sport, stage: document.querySelector('.nk').dataset.sport };
+  }, t);
+  const tk = await at(5.2), gf = await at(8.6);
+  check('영상 시각 → 카피 동기 (5.2s 태권도 · 8.6s 골프)',
+    tk.slide === 'tk' && tk.stage === 'tk' && gf.slide === 'gf' && gf.stage === 'gf',
+    `${tk.slide} / ${gf.slide}`);
+
+  /* 영상1 끝 → 영상2 크로스페이드 체인. load()가 배속을 되돌리지 않는지도 여기서 잡힌다 */
+  const chain = await page.evaluate(async () => {
+    const v1 = document.getElementById('nkVid1'), v2 = document.getElementById('nkVid2');
+    v1.currentTime = 9.9;
+    for (let i = 0; i < 40 && !v2.classList.contains('von'); i++) await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 300));
+    const on = document.querySelector('.nk-slide.on');
+    return { von2: v2.classList.contains('von'), von1: v1.classList.contains('von'),
+             paused: v2.paused, rate: v2.playbackRate, slide: on && on.dataset.sport };
+  });
+  check('영상1 끝 → 영상2로 이어진다 (첫 장면 배구)',
+    chain.von2 && !chain.von1 && !chain.paused && chain.slide === 'vb', chain.slide);
+  check('영상2도 0.8배 — load() 후에도 유지', chain.rate === 0.8, String(chain.rate));
+
+  /* 세그먼트 클릭 → 다른 영상의 그 장면 머리로. Range를 지원하지 않는 서버면 여기서 죽는다 */
+  await page.click('.nk-seg:nth-child(1)');
+  await page.waitForTimeout(600);
+  const back = await page.evaluate(() => {
+    const v1 = document.getElementById('nkVid1'), v2 = document.getElementById('nkVid2');
+    const on = document.querySelector('.nk-slide.on');
+    return { von1: v1.classList.contains('von'), von2: v2.classList.contains('von'),
+             t: v1.currentTime, paused: v1.paused, slide: on && on.dataset.sport };
+  });
+  check('세그먼트 클릭 → 해당 영상·장면으로 탐색',
+    back.von1 && !back.von2 && back.t < 1.5 && !back.paused && back.slide === 'bb',
+    `영상1 t=${back.t.toFixed(2)} ${back.slide}`);
+}
 
 console.log('\n· 인터랙티브 데모 4종');
 for (const it of await page.$$('#routineList .r-item')) await it.click();
