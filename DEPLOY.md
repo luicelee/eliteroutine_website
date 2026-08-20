@@ -42,7 +42,7 @@ SKIP되니, 그때만 실제 브라우저로 확인한다.
 
 ## 영상 파일 주의
 
-`heroplayer.mp4`(2.4MB) + `heroplayer2.mp4`(2.9MB) = 5.3MB가 첫 화면에서 로드된다.
+`heroplayer.mp4`(2.4MB) + `heroplayer2.mp4`(2.5MB) = 4.9MB가 첫 화면에서 로드된다.
 `img/`의 사진 16장(합 544KB)은 전부 `loading="lazy"`라 첫 화면에 영향이 없다.
 **실측(2026-08-20): 콜드 FCP 420ms · load 528ms** — 엣지 캐시가 물고 있어 지금은 문제가
 아니다. 그래도 더 줄여야 하면:
