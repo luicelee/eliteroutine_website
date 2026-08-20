@@ -135,18 +135,20 @@ if (!h264) {
     chain.von2 && !chain.von1 && !chain.paused && chain.slide === 'vb', chain.slide);
   check('영상2도 0.8배 — load() 후에도 유지', chain.rate === 0.8, String(chain.rate));
 
-  /* 세그먼트 클릭 → 다른 영상의 그 장면 머리로. Range를 지원하지 않는 서버면 여기서 죽는다 */
-  await page.click('.nk-seg:nth-child(1)');
-  await page.waitForTimeout(600);
-  const back = await page.evaluate(() => {
+  /* 세그먼트 클릭 → 다른 영상의 그 장면 머리로. 두 가지가 한 번에 걸린다:
+   * 서버가 Range를 지원하지 않으면 탐색이 죽고, 대상 영상이 아직 로드 전이면
+   * currentTime 대입이 조용히 무시된다 (2026-08-20 라이브에서 실제로 터졌다). */
+  await page.click('.nk-seg:nth-child(9)');   /* 육상 — 영상2의 4.0초 */
+  await page.waitForTimeout(900);
+  const jump = await page.evaluate(() => {
     const v1 = document.getElementById('nkVid1'), v2 = document.getElementById('nkVid2');
     const on = document.querySelector('.nk-slide.on');
     return { von1: v1.classList.contains('von'), von2: v2.classList.contains('von'),
-             t: v1.currentTime, paused: v1.paused, slide: on && on.dataset.sport };
+             t: v2.currentTime, paused: v2.paused, slide: on && on.dataset.sport };
   });
-  check('세그먼트 클릭 → 해당 영상·장면으로 탐색',
-    back.von1 && !back.von2 && back.t < 1.5 && !back.paused && back.slide === 'bb',
-    `영상1 t=${back.t.toFixed(2)} ${back.slide}`);
+  check('세그먼트 클릭 → 해당 영상·장면으로 탐색 (영상2 4.0초, 육상)',
+    jump.von2 && !jump.von1 && jump.t >= 3.9 && jump.t < 6 && !jump.paused && jump.slide === 'at',
+    `영상2 t=${jump.t.toFixed(2)} ${jump.slide}`);
 }
 
 console.log('\n· 인터랙티브 데모 4종');
