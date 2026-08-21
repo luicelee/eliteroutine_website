@@ -257,6 +257,23 @@ for (const [w, h] of [[1440, 900], [960, 800], [560, 800]]) {
 }
 
 console.log('');
+console.log('');
+console.log('· 실제 앱 화면');
+const gal = await page.evaluate(() => {
+  const imgs = [...document.querySelectorAll('.shot img')];
+  const dark = document.querySelector('.phone--shot .shot-dark');
+  const light = document.querySelector('.phone--shot .shot-light');
+  return { n: imgs.length, loaded: imgs.filter(i => i.naturalWidth > 0).length,
+           links: document.querySelectorAll('.shot a[target="_blank"]').length,
+           phoneDark: dark && dark.naturalWidth, phoneLight: light && light.naturalWidth,
+           track: document.querySelector('.shots').scrollWidth > document.querySelector('.shots').clientWidth };
+});
+check('갤러리 화면이 모두 로드된다', gal.n >= 10 && gal.loaded === gal.n, gal.loaded + '/' + gal.n + '장');
+check('화면마다 원본으로 여는 링크가 있다', gal.links === gal.n, gal.links + '개');
+check('폰 목업이 진짜 스크린샷이다 (다크·라이트 둘 다)',
+  gal.phoneDark > 0 && gal.phoneLight > 0, gal.phoneDark + 'px / ' + gal.phoneLight + 'px');
+check('갤러리는 안에서만 가로로 흐른다', gal.track);
+
 console.log('· 만든 이유 카툰 페이지');
 const toonLinks = await page.$$eval('a[href="story.html"]', as => as.length);
 check('index에서 카툰 페이지로 가는 링크가 있다', toonLinks >= 2, toonLinks + '곳');
