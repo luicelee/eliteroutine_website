@@ -199,27 +199,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
 .phone-scene{position:relative;width:min(312px,84vw);margin:0 auto}
 .phone{width:100%;background:var(--paper);border:1px solid var(--rule);border-radius:28px;
   padding:16px 14px 20px;box-shadow:0 50px 90px -50px rgba(0,0,0,.75)}
-.phone-notch{width:76px;height:5px;border-radius:99px;background:var(--hair);margin:0 auto 14px}
-.phone-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 12px}
-.phone-head b{font-size:16px;font-weight:800;letter-spacing:-.03em}
-.phone-head span{font-size:11px;color:var(--ink3);font-weight:700}
-.ring-card{border:1px solid var(--hair);padding:16px 12px;margin-bottom:12px}
-.rings{display:flex;justify-content:space-around}
-.ringbox{text-align:center;color:var(--ink)}
-.ringbox svg{margin:0 auto 8px}
 .ring-track{fill:none;stroke:var(--hair)}
 .ring-val{fill:none;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;
   transition:stroke-dashoffset 1.6s var(--ease)}
-.ring-num{font-size:17px;font-weight:800;letter-spacing:-.04em}
-.ring-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:700}
-.mini-routine{border:1px solid var(--hair);padding:14px 13px}
-.mini-routine h5{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);
-  font-weight:700;margin-bottom:10px}
-.mini-item{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:12.5px;font-weight:600;color:var(--ink2)}
-.mini-check{width:15px;height:15px;border:1.5px solid var(--rule);display:grid;place-items:center;
-  font-size:9px;flex-shrink:0}
-.mini-item.done .mini-check{background:var(--green);border-color:var(--green);color:#04120A}
-.mini-item.done span:last-child{color:var(--ink3);text-decoration:line-through}
 /* 떠 있는 글래스 칩은 쓰지 않는다 — 흔한 SaaS 클리셰이고 폰 화면을 가린다.
    같은 정보를 폰 아래 괘선 캡션으로 붙인다 */
 .phone-cap{margin-top:20px;border-top:1px solid var(--rule)}
@@ -227,6 +209,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
   padding:9px 2px;border-bottom:1px solid var(--hair)}
 .phone-cap b{font-size:11.5px;font-weight:700;letter-spacing:-.02em}
 .phone-cap span{font-size:10.5px;color:var(--ink3);font-weight:600;text-align:right}
+
+/* 폰 목업 안은 진짜 앱 화면이다. 테마에 맞춰 다크/라이트 스크린샷을 바꿔 끼운다 */
+.phone--shot{padding:8px}
+.phone--shot img{width:100%;height:auto;border-radius:21px}
+[data-theme="dark"] .shot-light,[data-theme="light"] .shot-dark{display:none}
+
+/* ---------- 실제 앱 화면 갤러리 ---------- */
+.shots{overflow-x:auto;overflow-y:hidden;padding:clamp(26px,3.4vw,44px) 0 clamp(6px,1vw,12px)}
+.shots-track{display:flex;gap:clamp(14px,1.8vw,26px);padding:0 var(--gut);width:max-content}
+.shot{width:clamp(168px,21vw,224px);flex-shrink:0}
+.shot img{width:100%;height:auto;border:1px solid var(--rule);background:var(--bg2);transition:.25s var(--ease)}
+.shot a:hover img{border-color:var(--mark)}
+.shot figcaption{padding-top:11px;margin-top:11px;border-top:1px solid var(--hair)}
+.shot b{display:block;font-size:13px;font-weight:800;letter-spacing:-.03em;margin-bottom:5px}
+.shot small{display:block;font-size:11px;line-height:1.65;color:var(--ink3);font-weight:600}
 
 /* ---------- 티커 ---------- */
 .ticker{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);overflow:hidden;padding:13px 0}
@@ -332,6 +329,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);
   font-size:13.5px;line-height:1.6;color:var(--ink2)}
 .try-hint{margin-top:20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   font-weight:800;color:var(--mark)}
+
+/* 기능별 광고 영상 — 해당 데모 옆에 붙는다 */
+.ad-link{display:flex;align-items:center;gap:14px;width:100%;margin-top:22px;padding:12px;
+  border:1px solid var(--rule);text-align:left;transition:.25s var(--ease)}
+.ad-link:hover{border-color:var(--mark);background:var(--bg2)}
+.ad-link + .ad-link{margin-top:10px}
+.ad-thumb{position:relative;flex-shrink:0;width:64px;aspect-ratio:9/16;overflow:hidden;background:var(--bg2)}
+.ad-thumb img{width:100%;height:100%;object-fit:cover}
+.ad-thumb::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;
+  transform:translate(-42%,-50%);border-left:13px solid #fff;border-top:8px solid transparent;
+  border-bottom:8px solid transparent;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.ad-txt b{display:block;font-size:14px;font-weight:800;letter-spacing:-.03em;margin-bottom:5px}
+.ad-link:hover .ad-txt b{color:var(--mark)}
+.ad-txt small{display:block;font-size:11.5px;line-height:1.6;color:var(--ink3);font-weight:600}
+.ad-tag{display:inline-block;margin-bottom:7px;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:800;color:var(--mark)}
+
+/* 세로 영상 재생 창 */
+.vmodal-panel{position:relative;width:min(400px,100%);max-height:88vh;background:var(--bg);
+  border:1px solid var(--rule);padding:18px;transform:translateY(14px);transition:transform .35s var(--ease)}
+.modal.on .vmodal-panel{transform:none}
+.vmodal-panel video{width:100%;max-height:calc(88vh - 96px);background:#000;margin-top:14px}
+.vmodal-panel .label{padding-right:34px}
 
 /* 앱 화면만 둥글다 — 지면은 각지고, 제품은 부드럽다 */
 .stage{background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:clamp(18px,2.2vw,26px)}
