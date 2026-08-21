@@ -160,7 +160,7 @@ if (!h264) {
     `영상2 t=${jump.t.toFixed(2)} ${jump.slide}`);
 }
 
-console.log('\n· 인터랙티브 데모 4종');
+console.log('\n· 인터랙티브 데모 5종');
 for (const it of await page.$$('#routineList .r-item')) await it.click();
 await page.waitForTimeout(300);
 check('루틴 체크리스트 → 100% + 보상', await page.$eval('#routineReward', el => el.classList.contains('won')),
@@ -174,11 +174,35 @@ await page.waitForTimeout(200);
 check('ACWR 슬라이더 → 위험 구간', (await page.$eval('#acwrZone', el => el.textContent)).includes('위험'));
 check('몸 그림 클릭 → 통증 기록', (await page.$eval('#painNote', el => el.textContent)).includes('어깨'));
 
+await page.click('.demo-tab[data-panel="p-scout"]');
+await page.waitForTimeout(200);
+const zoneCells = await page.$$('#zoneGrid button');
+await zoneCells[7].click();          /* 존 안 */
+await zoneCells[12].click();         /* 존 안 가운데 */
+await zoneCells[12].click();         /* 한 번 더 → 약한 코스 */
+await zoneCells[0].click();          /* 존 밖 */
+await page.waitForTimeout(200);
+const zone = await page.evaluate(() => ({
+  cells: document.querySelectorAll('#zoneGrid button').length,
+  inzone: document.querySelectorAll('#zoneGrid button.inzone').length,
+  hot: document.querySelectorAll('#zoneGrid button.hot').length,
+  cold: document.querySelectorAll('#zoneGrid button.cold').length,
+  note: document.getElementById('zoneNote').textContent,
+}));
+check('스트라이크 존 25칸 · 가운데 9칸이 존 안', zone.cells === 25 && zone.inzone === 9,
+  zone.cells + '칸 / 존 안 ' + zone.inzone + '칸');
+check('칸을 누르면 강한 → 약한 → 해제로 돈다',
+  zone.hot === 2 && zone.cold === 1 && zone.note.includes('강한 코스 2칸'),
+  '강한 ' + zone.hot + ' · 약한 ' + zone.cold);
+
 await page.click('.demo-tab[data-panel="p-report"]');
 await page.waitForTimeout(200);
 await page.click('#genReport');
 await page.waitForTimeout(1500);
 check('실적표 생성', await page.$eval('#reportPaper', el => el.classList.contains('show')));
+check('실적표를 만들면 공유 링크가 살아난다',
+  await page.$eval('#reportShare', el => el.classList.contains('on')),
+  await page.$eval('#reportViews', el => el.textContent));
 
 await page.click('.demo-tab[data-panel="p-parent"]');
 await page.waitForTimeout(200);
